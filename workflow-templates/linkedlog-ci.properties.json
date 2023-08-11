@@ -1,0 +1,5 @@
+{
+  "name": "LinkdelogisticsIT basic CI starter workflow",
+  "iconName": "octicon telescope",
+  "categories": ["Go", "Docker", "Kubernetes", "Helm", "continuos-integration", "deployment"]
+}
