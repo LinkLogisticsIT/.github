@@ -1,4 +1,4 @@
-name: Linkedlog CI Starter
+name: linkedlog-ci
 on:
   push:
     branches:

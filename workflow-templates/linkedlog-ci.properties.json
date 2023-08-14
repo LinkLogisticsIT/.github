@@ -1,5 +1,6 @@
 {
   "name": "LinkdelogisticsIT basic CI starter workflow",
+  "description": "Quick starter workflow, that show how to use LinkedlogsiticsIT CI/CD tools",
   "iconName": "octicon telescope",
-  "categories": ["Go", "Docker", "Kubernetes", "Helm", "continuos-integration", "deployment"]
+  "categories": ["Go", "Docker", "Kubernetes", "Helm", "continuous-integration", "deployment"]
 }
