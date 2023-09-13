@@ -1,6 +1,6 @@
 # This is a starter workflow file for Linkedlog CI. Rename your workflow file from cicd-starter.yaml to <your-service-name>-ci.yaml
 # you will need to add your repo to the terraform configuration in the iac repo, for a correct environment to be created, so that the CD part of the pipeline can work
-name: ci-starter.yaml
+name: linklogisticsit-ci.yaml
 
 on:
   push:
