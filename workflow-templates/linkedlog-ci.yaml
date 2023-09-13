@@ -1,4 +1,7 @@
-name: linkedlog-ci
+# This is a starter workflow file for Linkedlog CI. Rename your workflow file from cicd-starter.yaml to <your-service-name>-ci.yaml
+# you will need to add your repo to the terraform configuration in the iac repo, for a correct environment to be created, so that the CD part of the pipeline can work
+name: ci-starter.yaml
+
 on:
   push:
     branches:
@@ -7,11 +10,19 @@ on:
     branches:
       - [ $default-branch ]
   workflow_dispatch:
-
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Say hello
-        run: echo "Hello, world for Linkedlog!"
+  hello:
+  steps:
+    - name: Say hello
+      run: echo "Hello, world for Linkedlog!"
+  call-linkedlog-ci: # call the reusable workflow in the 'gitops'
+    uses: LinkLogisticsIT/gitops/.github/workflows/ci.yml@master # use the latest version on the master branch
+    with: # pass in the required parameters
+      source-directory: golang-microservice-plain-yaml/rating # where is your source code, and Dockerfile located (relative to repository root)
+      k8s-resources-directory: src/k8s-app # where are your k8s manifests located (relative to source-directory)
+      service-name: rating-plain-yaml-app # what is the name of your service
+      environment: 'gitops-config-development-managed-by-TF'
+      trigger-quality-gate: true # trigger the quality gate job in the 'gitops' repository
+    secrets:
+      GH_CONFIG_REPO_PAT: ${{ secrets.GH_CONFIG_REPO_PAT }} # magic from https://github.com/AllanOricil/workflow-template-bug/blob/master/.github/workflows/workflow-inplementation.yml
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
