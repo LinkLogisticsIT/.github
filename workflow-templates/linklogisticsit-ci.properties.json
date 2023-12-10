@@ -2,5 +2,12 @@
   "name": "LinkLogisticsIT basic CI starter workflow",
   "description": "Quick starter workflow, that show how to use LinkLogsiticsIT CI/CD tools",
   "iconName": "octicon telescope",
-  "categories": ["Kubernetes", "Dockerfile", "Helm", "Continuous-integration", "Deployment"]
+  "categories": [
+    "Kubernetes",
+    "Dockerfile",
+    "Helm",
+    "Continuous-integration",
+    "Deployment",
+    "Azure Web App"
+  ]
 }

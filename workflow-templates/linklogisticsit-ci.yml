@@ -4,25 +4,47 @@ name: linklogisticsit-ci.yaml
 
 on:
   push:
-    branches:
-      - [ $default-branch ]
+    branches: [$default-branch, "release"]
   pull_request:
-    branches:
-      - [ $default-branch ]
-  workflow_dispatch:
+    branches: [$default-branch, "release"]
+
 jobs:
   hello:
-  steps:
-    - name: Say hello
-      run: echo "Hello, world for Linkedlog!"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Say hello
+        run: echo "Hello, world for Linkedlog!"
+
   call-linkedlog-ci: # call the reusable workflow in the 'gitops'
+    permissions:
+      contents: read
+      packages: write
+      actions: read
     uses: LinkLogisticsIT/gitops/.github/workflows/ci.yml@master # use the latest version on the master branch
     with: # pass in the required parameters
-      source-directory: golang-microservice-plain-yaml/rating # where is your source code, and Dockerfile located (relative to repository root)
-      k8s-resources-directory: src/k8s-app # where are your k8s manifests located (relative to source-directory)
-      service-name: rating-plain-yaml-app # what is the name of your service
-      environment: 'gitops-config-development-managed-by-TF'
+      # General parameters
+      source-directory: change-me-to-app-folder/app # where is your source code, and Dockerfile located (relative to repository root)
+      service-name: change-me-app # what is the name of your service
+
+      # CI related settings
+      trigger-ci-integration-test: true # trigger the integration test job in the 'gitops' repository
       trigger-quality-gate: true # trigger the quality gate job in the 'gitops' repository
+
+      # Continous deployment parameters
+      preview: true # should a preview be created, if you PR to master a dev-feature preview will be created. If you PR to a release branch a dark-canary preview will be created. You must approve the PR on the gitops-config repo.
+
+      # Kubernetes CI and CD parameters
+      trigger-gitops-deployment: false # Should the app be deployed to k8s
+      k8s-resources-directory: src/k8s-app # where are your k8s manifests located (relative to source-directory) - Only required if you have k8s manifests
+
+      # Azure Web App CI and CD parameters
+      trigger-azure-web-app-deployment: false # Should the app be deployed to azure web app
+      azure-web-app-test-endpoint: "not-set" # The test endpoint for an azure web app, this is used to verify that the app is up and running before the deployment is considered successful. Not-set means that the deployment will be considered successful without any verification.
+
+      # Environments for deployments
+      environments: '["gitops-config-development-managed-by-TF", "gitops-config-production-eu-managed-by-TF"]' # which environments should be deployed to (must be managed by Terraform)
     secrets:
       GH_CONFIG_REPO_PAT: ${{ secrets.GH_CONFIG_REPO_PAT }} # magic from https://github.com/AllanOricil/workflow-template-bug/blob/master/.github/workflows/workflow-inplementation.yml
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
